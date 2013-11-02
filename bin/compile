@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+set -e
+set -o pipefail
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+echo "BUILD_DIR: $BUILD_DIR"
+echo "CACHE_DIR: $CACHE_DIR"
+
+cd $BUILD_DIR
+
+echo "----> Install pcre"
+
+PCRE_SRC=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.33.tar.gz
+PCRE_SRC_DIR=$(basename $PCRE_SRC .tar.gz)
+echo "----> Fatcing pcre source"
+curl --silent --max-time 60 --location "$PCRE_SRC" | tar xz
+cd $PCRE_SRC_DIR
+echo "----> Compiling pcre"
+CFLAGS="-Wall -g -O2" ./configure --prefix=/app/vendor/pcre --mandir=\${prefix}/share/man --infodir=\${prefix}/share/info --libdir=\${prefix}/lib --enable-jit --enable-utf8 --enable-unicode-properties
+make
+make install
+cd ..
+rm -rf $PCRE_SRC_DIR
+echo "----> pcre installed"
+
+echo "----> Setup LD_PRELOAD"
+export LD_PRELOAD=/app/vendor/pcre/lib/libpcre.so.1
+
+
+echo "----> Install ocaml"
+curl -kL https://raw.github.com/hcarty/ocamlbrew/master/ocamlbrew-install | env OCAMLBREW_BASE="/app/vendor/ocamlbrew" OCAMLBREW_OPAMROOT="/app/vendor/ocamlbrew/opamlib" bash -x && rm -rf /app/vendor/ocamlbrew/ocaml-4.00.1/build
