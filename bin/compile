@@ -10,6 +10,8 @@ CACHE_DIR=$2
 echo "BUILD_DIR: $BUILD_DIR"
 echo "CACHE_DIR: $CACHE_DIR"
 
+cd $BUILD_DIR
+
 echo "----> Install pcre"
 
 PCRE_SRC=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.33.tar.gz
