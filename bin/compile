@@ -32,7 +32,7 @@ export LD_PRELOAD=/app/vendor/pcre/lib/libpcre.so.1
 
 
 echo "----> Install ocaml"
-curl -kL https://raw.github.com/hcarty/ocamlbrew/master/ocamlbrew-install | env OCAMLBREW_BASE="/app/vendor/ocamlbrew" OCAMLBREW_OPAMROOT="/app/vendor/ocamlbrew/opamlib" bash -r && rm -rf /app/vendor/ocamlbrew/ocaml-4.00.1/build
+curl -kL https://raw.github.com/hcarty/ocamlbrew/master/ocamlbrew-install | env OCAMLBREW_FLAGS="-r" FINDLIB_VERSION="1.4" OPAM_VERSION="1.1.0" OCAMLBREW_BASE="/app/vendor/ocamlbrew" OCAMLBREW_OPAMROOT="/app/vendor/ocamlbrew/opamlib" bash -x && rm -rf /app/vendor/ocamlbrew/ocaml-4.00.1/build
 
 echo "----> Upgrade opam"
 opam update
